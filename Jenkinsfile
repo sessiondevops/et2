@@ -39,7 +39,7 @@ pipeline {
 						nexusUrl: 'ec2-3-142-240-205.us-east-2.compute.amazonaws.com:8081/', 
 						nexusVersion: 'nexus3', 
 						protocol: 'http', 
-						repository: 'java_Nexus_snap', 
+						repository: 'java_tomcat', 
 						version: "${pom.version}"
                 }				
                     
