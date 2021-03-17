@@ -9,7 +9,7 @@ pipeline {
 		stage("Check Out") {
 			steps {
 				script {
-					checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'Nexus_Cred', url: 'https://github.com/sessiondevops/nexus.git']]])
+					checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'Nexus_Cred', url: 'https://github.com/sessiondevops/et2.git']]])
 					
 				}
 			}
@@ -36,7 +36,7 @@ pipeline {
 					], 
 						credentialsId: 'Nexus_Cred', 
 						groupId: 'com.marsh', 
-						nexusUrl: '192.168.0.101:8081', 
+						nexusUrl: 'ec2-3-142-240-205.us-east-2.compute.amazonaws.com:8081/', 
 						nexusVersion: 'nexus3', 
 						protocol: 'http', 
 						repository: 'java_Nexus_snap', 
