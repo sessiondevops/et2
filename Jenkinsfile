@@ -50,6 +50,7 @@ pipeline {
 		stage("Pull and deploy") {
 			steps {
 				script {
+					def pom = readMavenPom file: ''
 					sh 'curl http://ec2-3-140-210-82.us-east-2.compute.amazonaws.com:8081/repository/et2-snapshot/com/marsh/et2/0.0.3-SNAPSHOT/et2-0.0.3-20210318.072233-1.war -o /usr/share/apache-tomcat-9.0.39/webapps/${pom.artifactId}.war'
 					sh 'chown -R jenkins:jenkins /usr/share/apache-tomcat-9.0.39/webapps/${pom.artifactId}.war',
 					sh '/usr/share/apache-tomcat-9.0.39/bin/startup.sh'
