@@ -25,6 +25,7 @@ pipeline {
 			steps {
 				script {
 					def pom = readMavenPom file: ''
+					def nexusRepoName = pom.version.endsWith("SNAPSHOT") ? "et2-snapshot" : "et2-release"
 					//echo  "${projectArtifactId} ${projectVersion}"
 					nexusArtifactUploader artifacts: [
 						[
@@ -36,10 +37,10 @@ pipeline {
 					], 
 						credentialsId: 'Nexus_Cred', 
 						groupId: 'com.marsh', 
-						nexusUrl: 'ec2-3-142-240-205.us-east-2.compute.amazonaws.com:8081', 
+						nexusUrl: 'ec2-3-140-210-82.us-east-2.compute.amazonaws.com:8081', 
 						nexusVersion: 'nexus3', 
 						protocol: 'http', 
-						repository: 'java_tomcat', 
+						repository: nexusRepoName, 
 						version: "${pom.version}"
                 }				
                     
