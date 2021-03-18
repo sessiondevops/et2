@@ -1,3 +1,6 @@
+def pom = readMavenPom file: ''
+def nexusRepoName = pom.version.endsWith("SNAPSHOT") ? "et2-snapshot" : "et2-release"
+
 pipeline {
     agent {
         label "master"
@@ -9,8 +12,7 @@ pipeline {
 		stage("Check Out") {
 			steps {
 				script {
-					checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'Nexus_Cred', url: 'https://github.com/sessiondevops/et2.git']]])
-					
+					checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'Nexus_Cred', url: 'https://github.com/sessiondevops/et2.git']]])	
 				}
 			}
 		}
@@ -24,8 +26,6 @@ pipeline {
 		stage("Nexus Upload") {
 			steps {
 				script {
-					def pom = readMavenPom file: ''
-					def nexusRepoName = pom.version.endsWith("SNAPSHOT") ? "et2-snapshot" : "et2-release"
 					//echo  "${projectArtifactId} ${projectVersion}"
 					nexusArtifactUploader artifacts: [
 						[
@@ -49,7 +49,8 @@ pipeline {
 		stage("Pull and deploy") {
 			steps {
 				script {
-					sh 'curl http://ec2-3-140-210-82.us-east-2.compute.amazonaws.com:8081/repository/et2-snapshot/com/marsh/et2/0.0.3-SNAPSHOT/et2-0.0.3-20210318.072233-1.war -o /usr/share/apache-tomcat-9.0.39/webapps/${projectArtifactId}.war'
+					sh 'curl http://ec2-3-140-210-82.us-east-2.compute.amazonaws.com:8081/repository/et2-snapshot/com/marsh/et2/0.0.3-SNAPSHOT/et2-0.0.3-20210318.072233-1.war -o /usr/share/apache-tomcat-9.0.39/webapps/${pom.artifactId}.war'
+					sh 'chown -R jenkins:jenkins /usr/share/apache-tomcat-9.0.39/webapps/${pom.artifactId}.war
 					sh '/usr/share/apache-tomcat-9.0.39/bin/startup.sh'
 					
 				}
