@@ -1,5 +1,4 @@
-def pom = readMavenPom file: ''
-def nexusRepoName = pom.version.endsWith("SNAPSHOT") ? "et2-snapshot" : "et2-release"
+
 
 pipeline {
     agent {
@@ -26,6 +25,8 @@ pipeline {
 		stage("Nexus Upload") {
 			steps {
 				script {
+					def pom = readMavenPom file: ''
+					def nexusRepoName = pom.version.endsWith("SNAPSHOT") ? "et2-snapshot" : "et2-release"
 					//echo  "${projectArtifactId} ${projectVersion}"
 					nexusArtifactUploader artifacts: [
 						[
